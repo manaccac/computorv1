@@ -1,14 +1,29 @@
+import re
 import function as function
 
 
 
 while True :
-  print("for leave tape exit")
+  print("\nfor leave tape exit\n")
   equation=input("Enter equation : ")
 
   if (equation == "exit"):
     break
-  print(function.sytax(equation))
+  equation = function.sytax(equation)
+  if (equation == -1):
+    exit()
+  equation = equation.split("=")
+  left_equation = equation[0]
+  right_equation = equation[1]
+  left_equation = re.split(r"(\+|-)", left_equation)
+  right_equation = re.split(r"(\+|-)", right_equation)
+
+  left_equation = function.cut_equation(left_equation)
+  right_equation = function.cut_equation(right_equation)
+  equation = function.reduced_form(left_equation, right_equation)
+  equation_degree = function.get_degree(equation)
+
+  function.solve_equation(equation)
 
 
 #5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0
