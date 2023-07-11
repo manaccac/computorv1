@@ -23,7 +23,6 @@ right_equation = equation[1]
 left_equation = re.split(r"(\+|-)", left_equation)
 right_equation = re.split(r"(\+|-)", right_equation)
 
-
 left_equation = function.cut_equation(left_equation)
 
 right_equation = function.cut_equation(right_equation)
@@ -33,7 +32,6 @@ equation_degree = function.get_degree(equation)
 
 
 function.solve_equation(equation)
-
 
 
 #5 * X^0 + 4 * X^1 - 9.3 * X^2 = 1 * X^0

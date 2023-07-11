@@ -121,13 +121,15 @@ def cut_equation(equation):
     i = 0
     for element in equation:
         if not element == "+" and not element == "-" and not len(element) == 0:
+            if '/' in element:
+                element = str(eval(element))
             element = element.split("*")
             if len(element) > 2:
                 exit()
             elif len(element) == 1:
                 if element[0].lower().startswith("x"):
                     element.insert(0, "1")
-                    power = element[0].lower().lstrip("x^") if '^' in element[0] else 1
+                    power = element[1].lower().lstrip("x^") if '^' in element[1] else 1
                 else:
                     power = 0
             else:
@@ -147,6 +149,7 @@ def cut_equation(equation):
                 index_coeff[int(power)] = float(coeff)
         i += 1
     return index_coeff
+
 
 
 
