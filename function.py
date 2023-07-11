@@ -21,7 +21,7 @@ def print_equation(equation):
         if i < get_degree(equation) and equation[i] > 0:
             print("+", end = " ")
         elif equation[i] < 0:
-            print("-", end = "") if i == get_degree(equation) else print("-", end = " ")
+            print("-", end = " ") if i == get_degree(equation) else print("-", end = " ")
         if not equation[i] == 0:
             coeff = int(equation[i]) if equation[i].is_integer() else equation[i]
         if not equation[i] == 0 and ft_abs(equation[i]) != 1:
@@ -145,7 +145,7 @@ def reduced_form(left_equation, right_equation):
     i = 0
     if len(left_equation) < len(right_equation):
         left_equation, right_equation = ft_swap(left_equation, right_equation)
-    print("<=>", end = " ")
+    print("<=>")
     print_equation(left_equation)
     print("=", end = " ")
     print_equation(right_equation)
@@ -155,7 +155,7 @@ def reduced_form(left_equation, right_equation):
         if len(right_equation) > 1:
             print("\n<=>")
             print_equation(left_equation)
-            print("=")
+            print("=", end = " ")
             print_equation(right_equation)
         i += 1
     print("\nReduced form:", end = " ")
@@ -191,7 +191,7 @@ def second_degree(equation):
             print(f"X2 = (-({equation[1]}) + √{delta}) / (2 * {equation[2]}) =", end = " ")
             print_solution(x2)
         elif delta == 0:
-            print("\nDiscriminant is nul, the solution is:")
+            print("\nDiscriminant is null, the solution is:")
             x1 = -equation[1]/(2*equation[2])
             print(f"X1 = -({equation[1]}) / (2 * {equation[2]}) =", end = " ")
             print_solution(x1)
