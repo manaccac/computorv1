@@ -67,48 +67,54 @@ def print_solution(solution):
     else:
         print(ft_fraction(solution))
 
-def sytax(equation):
-  i = 0
-  equation = str(equation).replace(' ', '')
-  
-  close = True
-  egale = False
-  while i != len(equation) :
-    if (equation[i] >= '0' and equation[i] <= '9') :
-      i += 1
-      continue
-    if (equation[i] == '=' and close == True and egale == False):
-      i += 1
-      egale = True
-      continue
-    elif (equation[i] == '(') :
-      i += 1
-      close = False
-      continue
-    elif ((equation[i] == '-' or equation[i] == '+' or equation[i] == '^' or equation[i] == '*' or equation[i] == '/') and i + 1 != len(equation) and ((equation[i + 1] >= '0' and equation[i + 1] <= '9') or equation[i + 1] == 'X' or equation[i] == 'x')) :
-      i += 1
-      continue
-    elif (equation[i] == '.' and (equation[i + 1] >= '0' and equation[i + 1] <= '9')) :
-      i += 1
-      continue
-    elif (equation[i] == 'X' or equation[i] == 'x') :
-      if (i + 1 != len(equation)):
-        if (equation[i + 1] == 'x' or equation[i + 1] == 'X') :
-          return -1
-        if (equation[i + 1] >= '0' and equation[i + 1] <= '9'):
-          return -1
-      i += 1
-      continue
-    elif (equation[i] == ')'):
-      close = True
-      i += 1
-      continue
-    else :
-      print("ERROR ERROR ERROR")
-      return -1
-  if (close == False) :
-    return -1
-  return (equation)
+def syntax(equation):
+    equation = equation.replace(' ', '')
+
+    close = True
+    equal_sign = False
+    has_x = False
+    only_digits = True
+    i = 0
+
+    if (equation == ""):
+        return -1
+
+    while i < len(equation):
+        char = equation[i]
+        next_char = equation[i + 1] if i + 1 < len(equation) else None
+
+        if char.isdigit():
+            if next_char and next_char.lower() == 'x':
+                return -1  # A digit is followed by an 'x' without an operator in between
+        elif char == '=':
+            if close and not equal_sign:
+                equal_sign = True
+            else:
+                return -1
+        elif char == '(':
+            close = False
+        elif char in '-+^*/' and next_char and (next_char.isdigit() or next_char.lower() == 'x'):
+            only_digits = False
+        elif char == '.' and next_char and next_char.isdigit():
+            pass
+        elif char.lower() == 'x':
+            has_x = True
+            only_digits = False
+            if next_char and (next_char.lower() == 'x' or next_char.isdigit()):
+                return -1
+        elif char == ')':
+            close = True
+        else:
+            return -1
+
+        i += 1
+
+    if not close or not equal_sign or not has_x or only_digits:
+        return -1
+
+    return equation
+
+
 
 
 def cut_equation(equation):
@@ -143,22 +149,32 @@ def cut_equation(equation):
 
 def reduced_form(left_equation, right_equation):
     i = 0
+    tmp_left = left_equation
+    tmp_right = right_equation
     if len(left_equation) < len(right_equation):
         left_equation, right_equation = ft_swap(left_equation, right_equation)
-    print("<=>")
-    print_equation(left_equation)
-    print("=", end = " ")
-    print_equation(right_equation)
+    if (tmp_left != left_equation and tmp_right != right_equation):
+        print("<=>")
+        print_equation(left_equation)
+        print("=", end = " ")
+        print_equation(right_equation)
+    tmp_right = right_equation
+    tmp_left = left_equation
     for coeff in right_equation:
         left_equation[i] += -coeff
         right_equation[i] = 0
         if len(right_equation) > 1:
+            if (tmp_left == left_equation and tmp_right == right_equation):
+                continue
             print("\n<=>")
             print_equation(left_equation)
             print("=", end = " ")
             print_equation(right_equation)
         i += 1
-    print("\nReduced form:", end = " ")
+        tmp_right = right_equation
+        tmp_left = left_equation
+    print("<=>")
+    print("Reduced form:", end = " ")
     print_equation(left_equation)
     print("= 0")
     return(left_equation)

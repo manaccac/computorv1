@@ -9,9 +9,13 @@ if len(sys.argv) != 2:
 equation = sys.argv[1]
 tmp = equation
 
-equation = function.sytax(equation)
-if (equation == -1):
+
+equation = function.syntax(equation)
+
+if (equation == -1 ):
+    print("Syntax error")
     sys.exit()
+
 print(tmp)
 equation = equation.split("=")
 left_equation = equation[0]
