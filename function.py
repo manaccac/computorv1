@@ -80,6 +80,7 @@ def syntax(equation):
         return -1
 
     while i < len(equation):
+        
         char = equation[i]
         next_char = equation[i + 1] if i + 1 < len(equation) else None
 
@@ -115,8 +116,6 @@ def syntax(equation):
     return equation
 
 
-
-
 def cut_equation(equation):
     index_coeff = []
     i = 0
@@ -125,15 +124,17 @@ def cut_equation(equation):
             element = element.split("*")
             if len(element) > 2:
                 exit()
-            elif len(element) == 1 and element[0].lower().startswith("x"):
-                element.insert(0, "1")
-            if len(element) > 1:
-                if element[1].lower() == 'x':
-                    power = 1
+            elif len(element) == 1:
+                if element[0].lower().startswith("x"):
+                    element.insert(0, "1")
+                    power = element[0].lower().lstrip("x^") if '^' in element[0] else 1
                 else:
-                    power = element[1].lower().lstrip("x^")
+                    power = 0
             else:
-                power = 0
+                if 'x' in element[1].lower():
+                    power = element[1].lower().lstrip("x^") if '^' in element[1] else 1
+                else:
+                    power = 0
             if equation[i - 1] == "+" or equation[i - 1] == "-":
                 coeff = equation[i - 1] + element[0]
             else:
@@ -141,11 +142,14 @@ def cut_equation(equation):
             if len(index_coeff) - 1 >= int(power):
                 index_coeff[int(power)] += float(coeff)
             else:
-                while len(index_coeff) < int(power):
-                    index_coeff.insert(len(index_coeff), 0)
-                index_coeff.insert(int(power), float(coeff))
+                while len(index_coeff) <= int(power):
+                    index_coeff.append(0)
+                index_coeff[int(power)] = float(coeff)
         i += 1
-    return(index_coeff)
+    return index_coeff
+
+
+
 
 def reduced_form(left_equation, right_equation):
     i = 0
@@ -164,8 +168,6 @@ def reduced_form(left_equation, right_equation):
         left_equation[i] += -coeff
         right_equation[i] = 0
         if len(right_equation) > 1:
-            if (tmp_left == left_equation and tmp_right == right_equation):
-                continue
             print("\n<=>")
             print_equation(left_equation)
             print("=", end = " ")
@@ -212,17 +214,18 @@ def second_degree(equation):
             print(f"X1 = -({equation[1]}) / (2 * {equation[2]}) =", end = " ")
             print_solution(x1)
         else:
-            print("\nDiscriminant is negatif, the two complexes solutions are:")
-            num = -equation[1]
-            denom = 2 * equation[2]
-            print(f"X1 = (-({equation[1]}) - i√{ft_abs(delta)}) / (2 * {equation[2]})")
-            print(f"X2 = (-({equation[1]}) + i√{ft_abs(delta)}) / (2 * {equation[2]})")
-            if num != 0:
-                print(f"X1 = ({num} - i√{ft_abs(delta)}) / {denom}")
-                print(f"X1 = ({num} + i√{ft_abs(delta)}) / {denom}")
-            else:
-                print(f"X1 = -i√{ft_abs(delta)} / {denom}")
-                print(f"X1 = i√{ft_abs(delta)} / {denom}")
+            print("\nDiscriminant is negative no real solution.")
+            print("\nThe two complex solutions are:")
+            print("α ± β*i")
+            print("α = -b / (2 * a)")
+            print("β = √∆ / (2 * a)")
+            print("X1 = (-b - i√∆) / (2 * a)")
+            print("X2 = (-b + i√∆) / (2 * a)")
+            real_part = -equation[1] / (2 * equation[2])  # α
+            imag_part = ft_sqrt(ft_abs(delta)) / (2 * equation[2])  #  β
+            print(f"X1 = {real_part} - {imag_part} * i")
+            print(f"X2 = {real_part} + {imag_part} * i")
+
 
 def solve_equation(equation):
     degree = get_degree(equation)

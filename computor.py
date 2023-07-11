@@ -23,10 +23,14 @@ right_equation = equation[1]
 left_equation = re.split(r"(\+|-)", left_equation)
 right_equation = re.split(r"(\+|-)", right_equation)
 
+
 left_equation = function.cut_equation(left_equation)
+
 right_equation = function.cut_equation(right_equation)
+
 equation = function.reduced_form(left_equation, right_equation)
 equation_degree = function.get_degree(equation)
+
 
 function.solve_equation(equation)
 
